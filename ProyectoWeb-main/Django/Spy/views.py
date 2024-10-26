@@ -20,7 +20,9 @@ def home(request):
 
 # Vista de productos
 def productos(request):
-    return render(request, 'pages/productos.html')
+    productos = Producto.objects.all()  # Obtenemos todos los productos de la base de datos
+
+    return render(request, 'pages/productos.html',{'productos': productos})
 
 # Vista de información sobre la empresa
 def nosotros(request):
@@ -156,14 +158,20 @@ def crear_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Producto creado exitosamente.')
-            return redirect('listar_productos')  # Define esta URL para listar productos
-        else:
-            messages.error(request, 'Corrige los errores del formulario.')
+            producto = form.save(commit=False)
+
+            # Verificar si se proporciona una imagen o una URL
+            if producto.imagen_url and not producto.imagen:
+                # Prioriza la URL si existe y no se cargó un archivo
+                producto.imagen = None
+            elif producto.imagen and not producto.imagen_url:
+                # Prioriza la imagen cargada desde el dispositivo
+                producto.imagen_url = None
+
+            producto.save()
+            return redirect('listar_productos')
     else:
         form = ProductoForm()
-
     return render(request, 'pages/crear_producto.html', {'form': form})
 
 # Nueva vista para listar productos (acceso solo para administradores)

@@ -139,3 +139,10 @@ AUTH_USER_MODEL = 'usuarios.CustomUser'
 LOGIN_URL = 'inicioSesion'  # Nombre de la URL para la vista de inicio de sesión
 LOGIN_REDIRECT_URL = 'home'  # URL a la que se redirige después de iniciar sesión
 
+import os
+
+# Archivos de medios (imágenes, archivos subidos por los usuarios)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+

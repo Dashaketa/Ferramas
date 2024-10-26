@@ -1,6 +1,10 @@
 from django.urls import path
 from Spy import views
 from django.contrib.auth.views import LogoutView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -22,4 +26,8 @@ urlpatterns = [
     path('usuarios/<int:usuario_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuario'),
     path('logout/', views.cerrarSesion, name='logout'),
      path('admin-page/', views.admin_page, name='admin_page'),  # Ruta para la página de administración
+     
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
