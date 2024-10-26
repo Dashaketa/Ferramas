@@ -27,7 +27,7 @@
               {% if request.user.is_authenticated %}
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
                 {% if request.user.es_administrador %}
-                  <li><a class="dropdown-item" href="{% url 'listar_usuarios' %}">Administrar</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_page' %}">Administrar</a></li>
                 {% endif %}
               {% else %}
                 <li><a class="dropdown-item" href="{% url 'inicioSesion' %}">Iniciar Sesión</a></li>

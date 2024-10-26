@@ -1,0 +1,72 @@
+/* Estilo global para el fondo y la tipografía */
+body {
+    background-color: #DEEBFF;
+    font-family: 'Arial', sans-serif;
+    color: navy;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Contenedor principal de administración */
+.admin-container {
+    text-align: center;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Títulos y subtítulos */
+.admin-title {
+    font-size: 2.5em;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.admin-subtitle {
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+/* Contenedor de botones */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Botones personalizados */
+.btn-custom {
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-custom:active {
+    transform: scale(0.98);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto de sombra en hover */
+.btn-custom:hover {
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3);
+}

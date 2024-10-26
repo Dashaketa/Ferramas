@@ -4,7 +4,15 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path('productos/', views.productos, name="productos"),
+    
+    # Rutas relacionadas con productos
+    path('productos/', views.productos, name='productos'),  # Página general de productos
+    path('productos/listar/', views.listar_productos, name='listar_productos'),  # Vista para listar productos (solo admin)
+    path('productos/crear/', views.crear_producto, name='crear_producto'),  # Vista para crear productos
+    path('productos/<int:producto_id>/actualizar/', views.actualizar_producto, name='actualizar_producto'),  # Vista para actualizar productos
+    path('productos/<int:producto_id>/eliminar/', views.eliminar_producto, name='eliminar_producto'),  # Vista para eliminar productos
+
+    # Otras vistas existentes
     path('nosotros/', views.nosotros, name='nosotros'),
     path('inicioSesion/', views.inicioSesion, name='inicioSesion'),
     path('registro/', views.registro, name='registro'),
@@ -13,4 +21,5 @@ urlpatterns = [
     path('usuarios/<int:usuario_id>/actualizar/', views.actualizar_usuario, name='actualizar_usuario'),
     path('usuarios/<int:usuario_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuario'),
     path('logout/', views.cerrarSesion, name='logout'),
+     path('admin-page/', views.admin_page, name='admin_page'),  # Ruta para la página de administración
 ]
