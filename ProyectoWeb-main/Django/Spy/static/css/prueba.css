@@ -1,0 +1,150 @@
+/* Estilo del fondo degradado */
+
+/* 
+body {
+  background: linear-gradient(to bottom, #dadada, #1F1F1F, #686868);
+  color: #000000;
+}
+
+h5 {
+  color: #000000;
+  font-size: xx-large;
+}
+
+h4 {
+  color: #000000;
+  font-size: xx-large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p {
+  color: #010102;
+  font-weight: 700;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #aee698, #ebd8d8, #8767aa);
+    color: #000000;
+  }
+
+  body {
+    background-image: linear-gradient(-60deg, #16a085 0%, #f4d03f 100%);
+ 
+   
+  }
+  
+
+
+*/
+body {
+    background: #DEEBFF
+  }
+  
+
+
+
+
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0016db;
+  border-color: #0056b3;
+}
+
+#carouselProductos {
+  margin-top: 40px;
+}
+
+.carousel-img {
+  height: 900px;
+  /* Puedes ajustar este valor según tus necesidades */
+  object-fit: contain;
+  /* Para que las imágenes se ajusten al tamaño sin deformarse */
+}
+
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+footer {
+  padding: 40px;
+}
+
+footer h5 {
+  margin-bottom: 20px;
+}
+
+footer p {
+  margin-bottom: 10px;
+}
+
+.list-inline-item {
+  margin-right: 10px;
+}
+
+.offcanvas-body img {
+  height: 200px;
+  /* Ajusta la altura según tus necesidades */
+  object-fit: contain;
+}
+
+.modal-content {
+
+    background: linear-gradient(to bottom, #aee698, #ebd8d8, #8767aa);
+    color: #000000;
+
+  color: #000000;
+}
+
+.modal-body {
+  color: #000000f8;
+  /* Color del texto dentro del modal */
+  text-align: center;
+
+
+}
+
+.modal-footer {
+  background-color: rgb(20, 77, 30);
+  /* Fondo del footer con opacidad */
+}
+
+.font-size-mujeres {
+font-size: 30px;
+border: 2px solid #333; /* Borde sólido */
+border-radius: 5px; /* Esquinas redondeadas */
+padding: 20px; /* Espacio dentro del contenedor */
+width: 300px;
+}
+
+.font-size-hombre{
+font-size: 30px;
+border: 2px solid #000000; /* Borde sólido */
+border-radius: 5px; /* Esquinas redondeadas */
+padding: 20px; /* Espacio dentro del contenedor */
+text-align: center;
+width: 300px; /* Ajustar el ancho del contenedor */
+
+}
+
+
+.font-footer{
+    
+    color: #0056b3;
+
+    
+    
+    
+    }
+    
+
+

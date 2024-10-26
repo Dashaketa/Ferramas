@@ -1,0 +1,106 @@
+body {
+ 
+    background-image: linear-gradient(60deg, #abecd6 0%, #DEEBFF 100%);
+   
+    }
+  
+  
+  
+    .navbar {
+      background-color: #343a40 !important;
+    }
+  
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+  
+    .btn-primary:hover {
+      background-color: #0016db;
+      border-color: #0056b3;
+    }
+  
+    #carouselProductos {
+      margin-top: 40px;
+    }
+  
+    .carousel-img {
+      height: 900px;
+      /* Puedes ajustar este valor según tus necesidades */
+      object-fit: contain;
+      /* Para que las imágenes se ajusten al tamaño sin deformarse */
+    }
+  
+    .card {
+      transition: transform 0.2s;
+    }
+  
+    .card:hover {
+      transform: scale(1.05);
+    }
+  
+  
+  
+    .list-inline-item {
+      margin-right: 10px;
+    }
+  
+    .offcanvas-body img {
+      height: 200px;
+      /* Ajusta la altura según tus necesidades */
+      object-fit: contain;
+    }
+  
+    .modal-content {
+  background: #DEEBFF
+      
+    }
+  
+    .modal-body {
+      color:navy;
+      /* Color del texto dentro del modal */
+     
+   
+  
+    }
+  
+    .modal-footer {
+      background: #007bff;
+    }
+  
+    .font-size-precio {
+      font-size: 24px;
+      border: 2px solid #ffffff;
+      /* Borde sólido */
+      border-radius: 5px;
+      /* Esquinas redondeadas */
+      padding: 10px;
+      /* Espacio dentro del contenedor */
+      color: #20c997;
+  
+    }
+  
+    .font-hombre{
+      font-size: 30px;
+      border: 2px solid #000000; /* Borde sólido */
+      border-radius: 5px; /* Esquinas redondeadas */
+      padding: 20px; /* Espacio dentro del contenedor */
+      width: 300px; /* Ajustar el ancho del contenedor */
+      text-align: center;
+      
+      }
+      .font-hombres{
+        font-size: 30px;
+        border: 2px solid #000000; /* Borde sólido */
+        border-radius: 5px; /* Esquinas redondeadas */
+        padding: 20px; /* Espacio dentro del contenedor */
+        width: 400px; /* Ajustar el ancho del contenedor */
+        text-align: center;
+        
+        }
+  
+    footer {
+      padding: 40px;
+    }
+    
+   

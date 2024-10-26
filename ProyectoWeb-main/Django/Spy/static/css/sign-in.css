@@ -1,0 +1,118 @@
+/* form-styles.css */
+.form-signin {
+  max-width: 400px;
+  padding: 15px;
+  margin: auto;
+  background-color: #f8f9fa; /* Light background for better contrast */
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-signin h1, .form-signin h2 {
+  margin-bottom: 20px;
+}
+
+.form-signin .form-floating {
+  margin-bottom: 15px;
+}
+
+.form-signin .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+body {
+ 
+  background:#727272
+
+    
+  }
+
+
+
+  .navbar {
+    background-color: #343a40 !important;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0016db;
+    border-color: #0056b3;
+  }
+
+  #carouselProductos {
+    margin-top: 40px;
+  }
+
+  .carousel-img {
+    height: 900px;
+    /* Puedes ajustar este valor según tus necesidades */
+    object-fit: contain;
+    /* Para que las imágenes se ajusten al tamaño sin deformarse */
+  }
+
+  .card {
+    transition: transform 0.2s;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+
+
+  .list-inline-item {
+    margin-right: 10px;
+  }
+
+  .offcanvas-body img {
+    height: 200px;
+    /* Ajusta la altura según tus necesidades */
+    object-fit: contain;
+  }
+
+  .modal-content {
+background: #DEEBFF
+    
+  }
+
+  .modal-body {
+    color:navy;
+    /* Color del texto dentro del modal */
+   
+ 
+
+  }
+
+  .modal-footer {
+    background: #007bff;
+  }
+
+  .font-size-precio {
+    font-size: 24px;
+    border: 2px solid #ffffff;
+    /* Borde sólido */
+    border-radius: 5px;
+    /* Esquinas redondeadas */
+    padding: 10px;
+    /* Espacio dentro del contenedor */
+    color: #20c997;
+
+  }
+
+  .font-size-hombre{
+    font-size: 30px;
+    border: 2px solid #000000; /* Borde sólido */
+    border-radius: 5px; /* Esquinas redondeadas */
+    padding: 20px; /* Espacio dentro del contenedor */
+    width: 300px; /* Ajustar el ancho del contenedor */
+    
+    }
+
+  footer {
+    padding: 40px;
+  }

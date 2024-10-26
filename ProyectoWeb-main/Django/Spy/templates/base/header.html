@@ -1,0 +1,125 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="{% static "img/logoPagina/logo-verde.png" %}" width="200" height="100" alt=""></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'productos' %}">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'nosotros' %}">Nosotros</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="cuentaDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img src="{% static "img/logo/person.svg" %}" width="24" height="24" alt="">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cuentaDropdown">
+              {% if request.user.is_authenticated %}
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                {% if request.user.es_administrador %}
+                  <li><a class="dropdown-item" href="{% url 'listar_usuarios' %}">Administrar</a></li>
+                {% endif %}
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'inicioSesion' %}">Iniciar Sesión</a></li>
+                <li><a class="dropdown-item" href="{% url 'registro' %}">Registrarse</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          <!-- Botón del carrito en el Navbar -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <button class="nav-link btn btn-link" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#carritoOffcanvas" aria-controls="carritoOffcanvas">
+                <img src="{% static "img/logo/cart4.svg" %}" alt="Carrito" width="24" height="24">
+              </button>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Offcanvas del Carrito -->
+  <div class="offcanvas offcanvas-end navbar-dark bg-dark" tabindex="-1" id="carritoOffcanvas"
+    aria-labelledby="carritoOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h4 class="offcanvas-title text-light" id="carritoOffcanvasLabel">Tu Carrito</h4>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <img src="{% static 'img/HOMBRES/CamisaNegraFloresBlanca1.jpg' %}" class="img-fluid" alt="Producto 1">
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title text-light">Camisa Flores</h5>
+                  <p class="card-text text-light">Camisa de botones amarilla y blanca</p>
+                  <p class="card-text font-size-precio text-light">Precio: $20.000</p>
+                  <button class="btn btn-danger">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <img src="{% static 'img/Poleron hombre 1.jpg' %}" class="img-fluid" alt="Producto 2">
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title text-light">Poleron Motivo Monito</h5>
+                  <p class="card-text text-light">Poleron Blanco con letras de colores</p>
+                  <p class="card-text font-size-precio text-light">Precio: $45.000</p>
+                  <button class="btn btn-danger">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <img src="{% static 'img/camisa31.jpg' %}" class="img-fluid" alt="Producto 3">
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title text-light">Camisa de Mezclilla</h5>
+                  <p class="card-text text-light">Camisa de Mezclilla</p>
+                  <p class="card-text font-size-precio text-light">Precio: $20.000</p>
+                  <button class="btn btn-danger text-light">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div class="row mt-3">
+          <div class="col-md-12 mx-auto text-end">
+            <hr>
+            <h4 class="text-success"> <strong>Total:</strong> $85.000</h4>
+            <button class="btn btn-success">Proceder al Pago</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
