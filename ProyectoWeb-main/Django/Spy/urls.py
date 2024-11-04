@@ -15,6 +15,8 @@ urlpatterns = [
     path('productos/crear/', views.crear_producto, name='crear_producto'),  # Vista para crear productos
     path('productos/<int:producto_id>/actualizar/', views.actualizar_producto, name='actualizar_producto'),  # Vista para actualizar productos
     path('productos/<int:producto_id>/eliminar/', views.eliminar_producto, name='eliminar_producto'),  # Vista para eliminar productos
+    path('pagar/', views.pagina_pago, name='pagina_pago'),
+
 
     # Otras vistas existentes
     path('nosotros/', views.nosotros, name='nosotros'),

@@ -11,6 +11,11 @@ from .models import Producto
 def es_administrador(user):
     return user.is_authenticated and user.es_administrador
 
+#pagina_pago
+
+def pagina_pago(request):
+    return render(request, 'pagina_pago.html')
+
 # Vista de inicio
 def home(request):
     context = {
