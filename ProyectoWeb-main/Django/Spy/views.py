@@ -14,7 +14,7 @@ def es_administrador(user):
 #pagina_pago
 
 def pagina_pago(request):
-    return render(request, 'pagina_pago.html')
+    return render(request, 'pages/pagina_pago.html')
 
 # Vista de inicio
 def home(request):
