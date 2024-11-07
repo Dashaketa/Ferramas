@@ -12,6 +12,19 @@
 <body>
     {% include 'base/header.html' %}
 
+    <!-- Bloque de Mensajes de Éxito/Error -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Catálogo de Productos -->
     <div class="container mt-5">
         <div class="row">
             {% for producto in productos %}
@@ -49,18 +62,12 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary add-to-cart" 
-                                    data-product-id="{{ forloop.counter }}" 
-                                    data-product-price="{{ producto.precio }}" 
-                                    data-product-stock="{{ producto.stock }}"
-                                    data-product-name="{{ producto.nombre }}"
-                                    data-product-image="{{ producto.imagen_url }}">Agregar al carrito</button>
+                                <a href="{% url 'agregar_al_carrito' producto.id %}" class="btn btn-primary">Agregar al carrito</a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             {% endfor %}
         </div>
     </div>
@@ -72,10 +79,28 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <ul id="carrito-items" class="list-group mb-3"></ul>
-            <div class="d-flex justify-content-between">
-                <span class="text-light">Total a pagar: $<span id="total-pagar">0</span></span>
-                <button class="btn btn-success" id="finalizar-compra">Finalizar Compra</button>
+            <ul id="carrito-items" class="list-group mb-3">
+                {% if request.user.is_authenticated and request.user.carrito %}
+                    {% for item in request.user.carrito.items.all %}
+                        <li class="list-group-item d-flex align-items-start">
+                            <img src="{{ producto.imagen_url }}" class="d-block w-100 mb-3" alt="{{ producto.nombre }}">
+                            <div>
+                                <div><strong>{{ item.producto.nombre }}</strong></div>
+                                <div>{{ item.cantidad }} unidades - ${{ item.total }}</div>
+                            </div>
+                            <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger ms-auto">Eliminar</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-light">El carrito está vacío.</p>
+                {% endif %}
+            </ul>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <h5 class="text-light">Total:</h5>
+                <h5 class="text-light" id="total-pagar">${{ total }}</h5>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{% url 'pagina_pago' %}" class="btn btn-primary" id="ir-a-pagar">Ir al Pago</a>
             </div>
         </div>
     </div>
@@ -83,74 +108,5 @@
     {% include 'base/footer.html' %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const carrito = [];
-            const carritoItems = document.getElementById('carrito-items');
-            const totalPagar = document.getElementById('total-pagar');
-
-            // Evento para agregar al carrito
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function () {
-                    const productId = this.dataset.productId;
-                    const productPrice = parseFloat(this.dataset.productPrice);
-                    const productName = this.dataset.productName;
-                    const productImage = this.dataset.productImage;
-                    let productStock = parseInt(this.dataset.productStock);
-                    const stockElement = document.getElementById(`stock-${productId}`);
-
-                    if (productStock > 0) {
-                        // Descontar del stock
-                        productStock -= 1;
-                        stockElement.textContent = productStock;
-                        this.dataset.productStock = productStock;
-
-                        // Agregar al carrito
-                        carrito.push({ id: productId, nombre: productName, precio: productPrice, imagen: productImage });
-
-                        // Actualizar la vista del carrito
-                        actualizarCarrito();
-                    } else {
-                        alert('No hay suficiente stock disponible.');
-                    }
-                });
-            });
-
-            // Actualizar la vista del carrito
-            function actualizarCarrito() {
-                carritoItems.innerHTML = '';
-                let total = 0;
-                const conteoProductos = {};
-
-                // Contar productos en el carrito
-                carrito.forEach(producto => {
-                    if (!conteoProductos[producto.id]) {
-                        conteoProductos[producto.id] = { cantidad: 0, precio: producto.precio, nombre: producto.nombre, imagen: producto.imagen };
-                    }
-                    conteoProductos[producto.id].cantidad += 1;
-                });
-
-                // Mostrar productos en el carrito
-                for (let id in conteoProductos) {
-                    const item = document.createElement('li');
-                    item.classList.add('list-group-item', 'd-flex', 'align-items-start');
-                    
-                    item.innerHTML = `
-                        <img src="${conteoProductos[id].imagen}" class="img-thumbnail me-3" style="width: 50px; height: 50px;" alt="${conteoProductos[id].nombre}">
-                        <div>
-                            <div><strong>${conteoProductos[id].nombre}</strong></div>
-                            <div>${conteoProductos[id].cantidad} unidades - $${conteoProductos[id].precio * conteoProductos[id].cantidad}</div>
-                        </div>
-                    `;
-                    
-                    carritoItems.appendChild(item);
-                    total += conteoProductos[id].precio * conteoProductos[id].cantidad;
-                }
-
-                // Actualizar el total a pagar
-                totalPagar.textContent = total;
-            }
-        });
-    </script>
 </body>
 </html>

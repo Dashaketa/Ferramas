@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ProductoForm
-from .models import Producto
+from .models import Producto, Carrito, ItemCarrito
 
 # Función para verificar si el usuario es administrador
 def es_administrador(user):
@@ -219,3 +219,52 @@ def eliminar_producto(request, producto_id):
 
 def admin_page(request):
     return render(request, 'pages/mediador.html')
+
+
+
+# Vista para agregar los productos en el carrito
+@login_required
+def agregar_al_carrito(request, producto_id):
+    # Asegúrate de que el producto exista
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    # Obtener o crear el carrito del usuario autenticado
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+
+    # Agregar o incrementar la cantidad del producto en el carrito
+    item, item_creado = ItemCarrito.objects.get_or_create(carrito=carrito, producto=producto)
+    if not item_creado:
+        item.cantidad += 1
+    item.save()
+
+    # Mostrar un mensaje de éxito
+    messages.success(request, f'{producto.nombre} ha sido agregado al carrito.')
+
+    # Redirigir a la página de productos
+    return redirect('productos')
+# Vista para ver los productos en el carrito
+@login_required
+def ver_carrito(request):
+    # Obtener el carrito del usuario
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    items = carrito.items.all()
+    total = sum(item.total() for item in items)  # Calcular el total sumando el precio de todos los items
+
+    return render(request, 'pages/carrito.html', {'items': items, 'total': total})
+
+
+# Vista para eliminar un producto del carrito
+@login_required
+def eliminar_del_carrito(request, item_id):
+    item = get_object_or_404(ItemCarrito, id=item_id, carrito__usuario=request.user)
+    item.delete()
+    messages.success(request, f'{item.producto.nombre} ha sido eliminado del carrito.')
+    return redirect('ver_carrito')
+
+# Vista para vaciar el carrito
+@login_required
+def vaciar_carrito(request):
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    carrito.items.all().delete()
+    messages.success(request, 'Tu carrito ha sido vaciado.')
+    return redirect('ver_carrito')

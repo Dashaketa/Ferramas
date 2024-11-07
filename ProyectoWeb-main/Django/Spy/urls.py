@@ -4,8 +4,6 @@ from django.contrib.auth.views import LogoutView
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-
 urlpatterns = [
     path("", views.home, name="home"),
     
@@ -17,6 +15,11 @@ urlpatterns = [
     path('productos/<int:producto_id>/eliminar/', views.eliminar_producto, name='eliminar_producto'),  # Vista para eliminar productos
     path('pagar/', views.pagina_pago, name='pagina_pago'),
 
+    # Rutas relacionadas con el carrito
+    path('carrito/', views.ver_carrito, name='ver_carrito'),  # Ver el contenido del carrito
+    path('carrito/agregar/<int:producto_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),  # Agregar producto al carrito
+    path('carrito/eliminar/<int:item_id>/', views.eliminar_del_carrito, name='eliminar_del_carrito'),  # Eliminar un producto del carrito
+    path('carrito/vaciar/', views.vaciar_carrito, name='vaciar_carrito'),  # Vaciar el carrito completo
 
     # Otras vistas existentes
     path('nosotros/', views.nosotros, name='nosotros'),
@@ -27,8 +30,7 @@ urlpatterns = [
     path('usuarios/<int:usuario_id>/actualizar/', views.actualizar_usuario, name='actualizar_usuario'),
     path('usuarios/<int:usuario_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuario'),
     path('logout/', views.cerrarSesion, name='logout'),
-     path('admin-page/', views.admin_page, name='admin_page'),  # Ruta para la página de administración
-     
+    path('admin-page/', views.admin_page, name='admin_page'),  # Ruta para la página de administración
 ]
 
 if settings.DEBUG:
