@@ -53,58 +53,102 @@
         </div>
     </nav>
 
-   <!-- Carrito Offcanvas -->
-<div class="offcanvas offcanvas-end navbar-dark bg-dark" tabindex="-1" id="carritoOffcanvas" aria-labelledby="carritoLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title text-light" id="carritoLabel">Carrito de Compras</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <ul id="carrito-items" class="list-group mb-3">
-            {% if request.user.is_authenticated and request.user.carrito %}
-                {% for item in request.user.carrito.items.all %}
-                    <li class="list-group-item d-flex align-items-start">
-                        <div>
-                            <div>              
+    <!-- Carrito Offcanvas -->
+    <div class="offcanvas offcanvas-end navbar-dark bg-dark" tabindex="-1" id="carritoOffcanvas" aria-labelledby="carritoLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title text-light" id="carritoLabel">Carrito de Compras</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul id="carrito-items" class="list-group mb-3">
+                {% if carrito_items %}
+                    {% for item in carrito_items %}
+                        <li class="list-group-item d-flex align-items-start">
+                            <div>
                                 <img src="{% if item.producto.imagen_url %}{{ item.producto.imagen_url }}{% elif item.producto.imagen %}{{ item.producto.imagen.url }}{% else %}{% static 'img/default-placeholder.png' %}{% endif %}" 
                                 class="img-thumbnail me-3" style="width: 50px; height: 50px;" alt="{{ item.producto.nombre }}">
-                                                       </div>
-                            <div><strong>{{ item.producto.nombre }}</strong></div>
-                            <div>{{ item.cantidad }} unidades - ${{ item.total }}</div>
-                        </div>
-                        <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger ms-auto">Eliminar</a>
-                    </li>
-                {% endfor %}
-            {% else %}
-                <p class="text-light">El carrito está vacío.</p>
-            {% endif %}
-        </ul>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <h5 class="text-light">Total:</h5>
-            <h5 class="text-light" id="total-pagar">
-         
-            </h5>
-        </div>
-        <div class="d-flex justify-content-end mt-3">
-            <a href="{% url 'pagina_pago' %}" class="btn btn-primary" id="ir-a-pagar">Ir al Pago</a>
+                                <div><strong>{{ item.producto.nombre }}</strong></div>
+                                <div>{{ item.cantidad }} unidades - ${{ item.total }}</div>
+                            </div>
+                            <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger ms-auto">Eliminar</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-light">El carrito está vacío.</p>
+                {% endif %}
+            </ul>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <h5 class="text-light">Total:</h5>
+                <h5 class="text-light" id="total-pagar">${{ carrito_total }}</h5>
+            </div>
+            
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{% url 'iniciar_pago' %}" class="btn btn-primary" id="ir-a-pagar">Ir al Pago</a>
+            </div>
         </div>
     </div>
-</div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const cuentaDropdown = document.getElementById('cuentaDropdown');
-            const dropdownMenu = new bootstrap.Dropdown(cuentaDropdown);
+            const dropdownToggle = document.getElementById('cuentaDropdown');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
     
-            cuentaDropdown.addEventListener('click', function (event) {
-                event.preventDefault(); // Evita que recargue la página
-                dropdownMenu.toggle(); // Alterna el despliegue del menú
+            dropdownToggle.addEventListener('click', function (event) {
+                event.preventDefault();
+                // Alterna la clase "show" para abrir o cerrar el dropdown
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            // Cierra el dropdown si haces clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para actualizar el total del carrito
+            function actualizarTotalCarrito() {
+                fetch("{% url 'obtener_total_carrito' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('total-pagar').textContent = `$${data.total}`;
+                    });
+            }
 
+            // Función para actualizar los elementos del carrito
+            function actualizarCarritoItems() {
+                fetch("{% url 'ver_carrito' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('#carrito-items').innerHTML = data.html;
+                        document.getElementById('total-pagar').textContent = `$${data.total}`;
+                        asociarEventosEliminar();
+                    });
+            }
+
+            // Asocia los eventos a los botones de "Eliminar" de los productos en el carrito
+            function asociarEventosEliminar() {
+                document.querySelectorAll('.btn-danger').forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        fetch(this.href, { method: 'GET' })
+                            .then(() => {
+                                actualizarCarritoItems();
+                                actualizarTotalCarrito();
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+                });
+            }
+
+            // Inicializa los eventos de eliminar para los elementos que ya están cargados
+            asociarEventosEliminar();
+            actualizarTotalCarrito(); // Inicializa el total del carrito
+        });
+    </script>
 </body>
 </html>

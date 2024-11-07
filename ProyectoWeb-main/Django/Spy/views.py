@@ -6,6 +6,21 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ProductoForm
 from .models import Producto, Carrito, ItemCarrito
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.conf import settings
+from transbank.webpay.webpay_plus.transaction import Transaction, WebpayOptions
+from transbank.common.integration_type import IntegrationType
+from transbank.error.transbank_error import TransbankError
+import uuid
+
+
+
+
+def pagina_error(request):
+    return render(request, 'pages/pagina_error.html')
+
+
 
 # Función para verificar si el usuario es administrador
 def es_administrador(user):
@@ -248,10 +263,12 @@ def ver_carrito(request):
     # Obtener el carrito del usuario
     carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
     items = carrito.items.all()
-    total = sum(item.total() for item in items)  # Calcular el total sumando el precio de todos los items
+    total = sum(item.producto.precio * item.cantidad for item in items)
 
-    return render(request, 'pages/carrito.html', {'items': items, 'total': total})
+    # Renderizar el HTML de los elementos del carrito
+    carrito_items_html = render_to_string('pages/partials/carrito_items.html', {'items': items})
 
+    return JsonResponse({'html': carrito_items_html, 'total': total})
 
 # Vista para eliminar un producto del carrito
 @login_required
@@ -268,3 +285,67 @@ def vaciar_carrito(request):
     carrito.items.all().delete()
     messages.success(request, 'Tu carrito ha sido vaciado.')
     return redirect('ver_carrito')
+
+@login_required
+def obtener_total_carrito(request):
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    total = sum(item.producto.precio * item.cantidad for item in carrito.items.all())
+    return JsonResponse({'total': total})
+
+
+@login_required
+def iniciar_pago(request):
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    amount = sum(int(item.producto.precio) * item.cantidad for item in carrito.items.all())
+    
+    buy_order = f"order_{uuid.uuid4().hex[:15]}"
+    session_id = str(request.user.id) if request.user.is_authenticated else "anon"
+    return_url = request.build_absolute_uri('/pago/exito/')
+
+    # Configuración de Transbank con el tipo de integración TEST
+    tx = Transaction(WebpayOptions(
+        commerce_code=settings.TRANSBANK_COMMERCE_CODE,  # Código de comercio desde settings.py
+        api_key=settings.TRANSBANK_API_KEY,              # API Key desde settings.py
+        integration_type=IntegrationType.TEST            # Asegúrate de que sea TEST para pruebas
+    ))
+
+    try:
+        response = tx.create(buy_order=buy_order, session_id=session_id, amount=amount, return_url=return_url)
+        return redirect(f"{response['url']}?token_ws={response['token']}")
+    except TransbankError as e:
+        messages.error(request, "Error al iniciar el pago: " + str(e))
+        return redirect('pagina_error')
+
+
+@login_required
+def confirmar_pago(request):
+    token = request.GET.get("token_ws")
+    if not token:
+        messages.error(request, "Error al confirmar el pago. Token no encontrado.")
+        return redirect('pagina_error')
+
+    tx = Transaction(WebpayOptions(
+        commerce_code=settings.TRANSBANK_COMMERCE_CODE,
+        api_key=settings.TRANSBANK_API_KEY,
+        integration_type=IntegrationType.TEST
+    ))
+
+    try:
+        response = tx.commit(token=token)
+        if response['status'] == 'AUTHORIZED':
+            return render(request, 'pages/exito_pago.html', {'detalle': response})
+        else:
+            error = f"({response['status']}, {response['response_code']})"
+            return render(request, 'pages/error_pago.html', {'error': error})
+    except TransbankError as e:
+        messages.error(request, f"Error al confirmar la transacción: {e}")
+        return redirect('pagina_error')
+
+   
+    
+    
+    
+    
+    
+    
+    

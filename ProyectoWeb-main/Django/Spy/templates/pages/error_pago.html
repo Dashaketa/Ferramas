@@ -1,0 +1,14 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error en el Pago</title>
+</head>
+<body>
+    <h1>Hubo un problema con tu pago</h1>
+    <p>{{ error }}</p>
+    <a href="{% url 'home' %}">Volver al inicio</a>
+</body>
+</html>

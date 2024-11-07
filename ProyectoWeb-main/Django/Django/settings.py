@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Spy.context_processors.carrito_context',  # Agrega esta línea
             ],
         },
     },
@@ -146,3 +147,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+# Configuración de Transbank para el entorno de pruebas
+TRANSBANK_ENVIRONMENT = 'INTEGRACION'
+TRANSBANK_COMMERCE_CODE = '597055555532'  # Ejemplo de código de comercio para pruebas
+TRANSBANK_API_KEY = 'XTYu2KlTTLK12+gCZK0LISLOJKN1oFIEVnC1PEKFk6VtK6goam9RpiHAAzspc7gZ'  # Ejemplo de clave de API para pruebas

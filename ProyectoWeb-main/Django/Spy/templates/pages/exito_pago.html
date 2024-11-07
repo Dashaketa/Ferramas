@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pago Exitoso</title>
+</head>
+<body>
+    <h1>¡Pago Exitoso!</h1>
+    <p>Tu transacción fue completada correctamente.</p>
+    <p>Detalles del pedido:</p>
+    <ul>
+        <li>Orden: {{ detalle.buy_order }}</li>
+        <li>Monto: ${{ detalle.amount }}</li>
+        <li>Estado: {{ detalle.status }}</li>
+    </ul>
+    <a href="{% url 'home' %}">Volver al inicio</a>
+</body>
+</html>
